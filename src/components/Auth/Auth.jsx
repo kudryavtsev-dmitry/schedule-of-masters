@@ -18,11 +18,7 @@ const useStyles = makeStyles({
     height: 'calc(100vh - 48px)',
   },
   card: {
-    height: '60%',
     width: '30%',
-  },
-  button: {
-    marginTop: 30,
   },
   title: {
     textAlign: 'center',
@@ -33,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Auth = () => {
+const Auth = ({ formik }) => {
   const classes = useStyles();
 
   return (
@@ -41,16 +37,22 @@ const Auth = () => {
       <Card className={classes.card}>
         <CardHeader title="Авторизация" className={classes.title} />
         <CardContent>
-          <form>
+          <form onSubmit={formik.handleSubmit}>
             <Grid container alignItems="center" spacing={3} justify="center">
               <Grid item xs={8}>
-                <TextField label="Логин" fullWidth />
+                <TextField label="Логин" name="login" fullWidth onChange={formik.handleChange} />
               </Grid>
               <Grid item xs={8}>
-                <TextField label="Пароль" fullWidth type="password" />
+                <TextField
+                  name="password"
+                  label="Пароль"
+                  fullWidth
+                  type="password"
+                  onChange={formik.handleChange}
+                />
               </Grid>
               <Grid item xs={8} className={classes.button}>
-                <Button variant="contained" color="primary" fullWidth>
+                <Button variant="contained" color="primary" fullWidth type="submit">
                   Войти
                 </Button>
               </Grid>

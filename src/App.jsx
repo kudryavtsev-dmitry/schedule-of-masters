@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import { deepPurple, red } from '@material-ui/core/colors';
+import { grey, red } from '@material-ui/core/colors';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Header } from './components';
 import Layout from './components/Layout/Layout';
@@ -9,7 +9,7 @@ import Layout from './components/Layout/Layout';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: deepPurple[600],
+      main: grey[900],
     },
     secondary: {
       main: red[500],

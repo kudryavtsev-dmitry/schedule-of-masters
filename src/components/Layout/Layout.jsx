@@ -1,14 +1,14 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Auth, Registration } from '..';
+import { AuthContainer, RegistrationContainer } from '../../containers';
 
 const Layout = () => (
   <Switch>
     <Route path="/registration">
-      <Registration />
+      <RegistrationContainer />
     </Route>
     <Route path="/">
-      <Auth />
+      <AuthContainer />
     </Route>
   </Switch>
 );

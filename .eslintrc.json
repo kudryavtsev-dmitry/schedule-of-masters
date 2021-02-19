@@ -13,6 +13,7 @@
   },
   "plugins": ["react"],
   "rules": {
-    "arrow-body-style": ["error", "as-needed"]
+    "arrow-body-style": ["error", "as-needed"],
+    "react/prop-types": 0
   }
 }
