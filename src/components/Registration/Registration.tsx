@@ -7,8 +7,9 @@ import {
   TextField,
   Button,
 } from '@material-ui/core';
-import React from 'react';
+import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+import { RegistrationProps } from './RegistrationProps';
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Registration = ({ formik }) => {
+const Registration: FC<RegistrationProps> = ({ formik }) => {
   const classes = useStyles();
 
   return (

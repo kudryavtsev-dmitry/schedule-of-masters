@@ -1,19 +1,15 @@
 {
+  "parser": "babel-eslint",
+  "extends": ["airbnb"],
   "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 12,
-    "sourceType": "module"
+    "es6": true
   },
   "plugins": ["react"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
-    "react/prop-types": 0
+    "react/jsx-curly-newline": "never"
   }
 }

@@ -7,8 +7,9 @@ import {
   makeStyles,
   TextField,
 } from '@material-ui/core';
-import React from 'react';
+import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+import { AuthProps } from './AuthProps';
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Auth = ({ formik }) => {
+const Auth: FC<AuthProps> = ({ formik }) => {
   const classes = useStyles();
 
   return (
@@ -40,7 +41,12 @@ const Auth = ({ formik }) => {
           <form onSubmit={formik.handleSubmit}>
             <Grid container alignItems="center" spacing={3} justify="center">
               <Grid item xs={8}>
-                <TextField label="Логин" name="login" fullWidth onChange={formik.handleChange} />
+                <TextField
+                  label="Логин"
+                  name="login"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
               </Grid>
               <Grid item xs={8}>
                 <TextField
@@ -51,8 +57,13 @@ const Auth = ({ formik }) => {
                   onChange={formik.handleChange}
                 />
               </Grid>
-              <Grid item xs={8} className={classes.button}>
-                <Button variant="contained" color="primary" fullWidth type="submit">
+              <Grid item xs={8}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  type="submit"
+                >
                   Войти
                 </Button>
               </Grid>

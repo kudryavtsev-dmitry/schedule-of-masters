@@ -1,9 +1,14 @@
-import { useFormik } from 'formik';
-import React from 'react';
+import { FormikProps, useFormik } from 'formik';
+import React, { FC } from 'react';
 import { Auth } from '../../components';
 
-const AuthContainer = () => {
-  const formik = useFormik({
+export type FormikAuth = {
+  login: string;
+  password: string;
+};
+
+const AuthContainer: FC = () => {
+  const formik: FormikProps<FormikAuth> = useFormik({
     initialValues: {
       login: '',
       password: '',
