@@ -3,12 +3,13 @@ import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Registration } from '../../components';
 import { signupAsync } from '../../services/UserService/UserServices';
+import { RegistrationSchema } from './RegistrationShema';
 
 export type FromikRegProps = {
   firstName: string;
   lastName: string;
   patronymic: string;
-  role: string;
+  role: number;
   login: string;
   password: string;
 };
@@ -21,10 +22,13 @@ const RegistrationContainer = () => {
       firstName: '',
       lastName: '',
       patronymic: '',
-      role: '',
+      role: 1,
       login: '',
       password: '',
     },
+
+    validationSchema: RegistrationSchema,
+
     onSubmit: (values) => {
       dispatch(signupAsync(values));
     },

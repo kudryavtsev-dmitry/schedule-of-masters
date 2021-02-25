@@ -28,6 +28,16 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
   },
+  nav: {
+    color: 'black',
+    textDecoration: 'none',
+  },
+  active: {
+    color: 'black',
+    '&:visited': {
+      color: 'black',
+    },
+  },
 });
 
 const Auth: FC<AuthProps> = ({ formik }) => {
@@ -46,6 +56,9 @@ const Auth: FC<AuthProps> = ({ formik }) => {
                   name="login"
                   fullWidth
                   onChange={formik.handleChange}
+                  error={Boolean(formik.touched.login && formik.errors.login)}
+                  helperText={formik.touched.login && formik.errors.login}
+                  onBlur={formik.handleBlur}
                 />
               </Grid>
               <Grid item xs={8}>
@@ -55,6 +68,11 @@ const Auth: FC<AuthProps> = ({ formik }) => {
                   fullWidth
                   type="password"
                   onChange={formik.handleChange}
+                  error={Boolean(
+                    formik.touched.password && formik.errors.password
+                  )}
+                  helperText={formik.touched.password && formik.errors.password}
+                  onBlur={formik.handleBlur}
                 />
               </Grid>
               <Grid item xs={8}>
@@ -68,7 +86,13 @@ const Auth: FC<AuthProps> = ({ formik }) => {
                 </Button>
               </Grid>
               <Grid item xs={8} className={classes.link}>
-                <NavLink to="/registration">Не зарегистрированы?</NavLink>
+                <NavLink
+                  to="/registration"
+                  className={classes.nav}
+                  activeClassName={classes.active}
+                >
+                  Не зарегистрированы?
+                </NavLink>
               </Grid>
             </Grid>
           </form>

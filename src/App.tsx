@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { grey, red } from '@material-ui/core/colors';
@@ -8,11 +8,15 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import { Header } from './components';
 import LayoutContainer from './containers/LatoutContainer/LayoutContainer';
-import { AuthContainer, RegistrationContainer } from './containers';
-import { useSelector } from 'react-redux';
+import {
+  AuthContainer,
+  HeaderContainer,
+  RegistrationContainer,
+} from './containers';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './services';
+import { loadRolesAsync } from './services/RolesService/RolesServices';
 
 const theme = createMuiTheme({
   palette: {
@@ -26,15 +30,19 @@ const theme = createMuiTheme({
 });
 
 const App = () => {
+  const dispatch = useDispatch();
+
   const isAuth = useSelector((state: RootState) => state.user.isAuth);
 
-  console.log(isAuth);
+  useEffect(() => {
+    dispatch(loadRolesAsync());
+  }, []);
 
   return (
     <>
       <Router>
         <ThemeProvider theme={theme}>
-          <Header />
+          <HeaderContainer />
           {isAuth ? (
             <Switch>
               <Route path="/">
