@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import { HeaderProps } from './HeaderProps';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -23,6 +24,8 @@ const Header: FC<HeaderProps> = ({ handleLogOut }) => {
           <Typography variant="h6" color="inherit" className={classes.title}>
             Расписание мастеров
           </Typography>
+          <NavLink to="/orders">Заказы</NavLink>
+
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
