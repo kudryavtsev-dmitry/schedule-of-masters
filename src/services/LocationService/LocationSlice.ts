@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+export type LocationType = {
+  id: number;
+  title: string;
+};
+
 export type Location = {
   id: number;
   parentId?: number;
   title: string;
-  lat: number;
-  long: number;
+  coordinates: string;
+  children: Location[];
   typeId: number;
-};
-
-export type LocationType = {
-  id: number;
-  title: string;
 };
 
 export interface LocationState {
@@ -35,13 +35,13 @@ const locationSlice = createSlice({
       state.locationTypes = action.payload.locationTypes;
       state.loading = false;
     },
-    servicesLoading(state) {
+    locationsLoading(state) {
       state.loading = true;
     },
   },
 });
 const { actions, reducer } = locationSlice;
 
-export const { saveLocationsData, servicesLoading } = actions;
+export const { saveLocationsData, locationsLoading } = actions;
 
 export default reducer;
