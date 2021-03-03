@@ -7,26 +7,30 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Theme,
   Typography,
+  Paper,
+  IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
+import { OrdersProps } from './OrdersProps';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -37,16 +41,24 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(3),
     width: '100%',
   },
-  emptyContent: {
+  content: {
     display: 'flex',
     flexDirection: 'column',
     height: 'calc(100% - 80px)',
-    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardTitle: {
+    flex: '0 0 auto',
+  },
+  action: {
+    margin: 0,
+  },
+  cardHeader: {
     alignItems: 'center',
   },
 }));
 
-const Orders = () => {
+const Orders: FC<OrdersProps> = ({ orders, formik }) => {
   const [open, setOpen] = useState(false);
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
@@ -66,15 +78,63 @@ const Orders = () => {
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
-
   return (
     <>
       <Box className={classes.root} display="flex" justifyContent="center">
         <Card className={classes.card}>
-          <CardHeader title="Ваши заказы" />
-          <CardContent className={classes.emptyContent}>
-            <Typography>Пока заказов нет.</Typography>
-            <Button onClick={handleClickOpen}>Создать заказ</Button>
+          <CardHeader
+            className={classes.cardHeader}
+            classes={{ content: classes.cardTitle, action: classes.action }}
+            title="Ваши заказы"
+            action={
+              <IconButton
+                aria-label="settings"
+                color="primary"
+                onClick={handleClickOpen}
+              >
+                <AddCircleIcon />
+              </IconButton>
+            }
+          />
+          <CardContent className={classes.content}>
+            {orders.length ? (
+              <TableContainer component={Paper}>
+                <Table size="small" aria-label="a dense table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Дата создания</TableCell>
+                      <TableCell align="center">Описание работы</TableCell>
+                      <TableCell align="center">Услуга</TableCell>
+                      <TableCell align="center">Мастер</TableCell>
+                      <TableCell align="center">Статус</TableCell>
+                      <TableCell align="center">Действие</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {orders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell align="center">{order.dateStart}</TableCell>
+                        <TableCell align="center">
+                          {order.description}
+                        </TableCell>
+                        <TableCell align="center">{'В разработке'}</TableCell>
+                        <TableCell align="center">{'В разработке'}</TableCell>
+                        <TableCell align="center">{order.status}</TableCell>
+                        <TableCell align="center">
+                          <Button variant="contained" color="secondary">
+                            Отменить
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <>
+                <Typography>Пока заказов нет.</Typography>
+              </>
+            )}
           </CardContent>
         </Card>
       </Box>
@@ -83,80 +143,57 @@ const Orders = () => {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Создать заказ</DialogTitle>
-        <DialogContent>
-          <form>
+        <form onSubmit={formik.handleSubmit}>
+          <DialogTitle id="form-dialog-title">Создать заказ</DialogTitle>
+          <DialogContent>
             <Grid container alignItems="center" spacing={2} justify="center">
               <Grid item xs={8}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Роль</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                  >
-                    <MenuItem value={1}>Клиент</MenuItem>
-                    <MenuItem value={2}>Мастер</MenuItem>
-                  </Select>
-                </FormControl>
+                <TextField
+                  name="description"
+                  label="Описание"
+                  fullWidth
+                  type="password"
+                  onChange={formik.handleChange}
+                  multiline
+                />
               </Grid>
               <Grid item xs={8}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     fullWidth
+                    name="dateStart"
                     id="date-picker-dialog"
                     label="Выбрать дату"
                     format="dd/MM/yyyy"
                     KeyboardButtonProps={{
                       'aria-label': 'change date',
                     }}
-                    value={selectedDate}
-                    onChange={handleDateChange}
+                    minDate={new Date()}
+                    value={formik.values.dateStart}
+                    onChange={(value) =>
+                      formik.setFieldValue('dateStart', value)
+                    }
                   />
                 </MuiPickersUtilsProvider>
               </Grid>
+
               <Grid item xs={8}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Роль</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                  >
-                    <MenuItem value={1}>Клиент</MenuItem>
-                    <MenuItem value={2}>Мастер</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={8}>
-                <TextField label="Логин" name="login" fullWidth />
-              </Grid>
-              <Grid item xs={8}>
-                <TextField
-                  name="password"
-                  label="Пароль"
-                  fullWidth
-                  type="password"
-                />
-              </Grid>
-              <Grid item xs={8}>
-                <TextField
-                  name="password"
-                  label="Комментарий"
-                  fullWidth
-                  type="password"
-                  multiline
-                />
+                <Button variant="contained" component="label">
+                  Upload File
+                  <input type="file" hidden />
+                </Button>
               </Grid>
             </Grid>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
-          </Button>
-        </DialogActions>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Отмена
+            </Button>
+            <Button onClick={handleClose} color="primary" type="submit">
+              Создать
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </>
   );
