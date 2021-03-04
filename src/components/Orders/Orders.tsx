@@ -20,6 +20,10 @@ import {
   Typography,
   Paper,
   IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -31,6 +35,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import React, { FC, useState } from 'react';
 import { OrdersProps } from './OrdersProps';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -58,7 +63,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Orders: FC<OrdersProps> = ({ orders, formik }) => {
+const Orders: FC<OrdersProps> = ({
+  orders,
+  formik,
+  handleRemoveUserOrder,
+  locations,
+  selectedCity,
+  handleSelectCity,
+  handleClearCity,
+}) => {
   const [open, setOpen] = useState(false);
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
@@ -72,12 +85,21 @@ const Orders: FC<OrdersProps> = ({ orders, formik }) => {
   };
 
   const handleClose = () => {
+    handleClearCity();
     setOpen(false);
   };
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
+
+  console.log(666, locations);
+
+  console.log(
+    777,
+    locations.find((loc) => loc.id === selectedCity)?.children.length
+  );
+
   return (
     <>
       <Box className={classes.root} display="flex" justifyContent="center">
@@ -99,7 +121,7 @@ const Orders: FC<OrdersProps> = ({ orders, formik }) => {
           <CardContent className={classes.content}>
             {orders.length ? (
               <TableContainer component={Paper}>
-                <Table size="small" aria-label="a dense table">
+                <Table size="medium" aria-label="a dense table">
                   <TableHead>
                     <TableRow>
                       <TableCell align="center">Дата создания</TableCell>
@@ -113,7 +135,9 @@ const Orders: FC<OrdersProps> = ({ orders, formik }) => {
                   <TableBody>
                     {orders.map((order) => (
                       <TableRow key={order.id}>
-                        <TableCell align="center">{order.dateStart}</TableCell>
+                        <TableCell align="center">
+                          {moment(order.dateStart).format('DD.MM.yyyy')}
+                        </TableCell>
                         <TableCell align="center">
                           {order.description}
                         </TableCell>
@@ -121,7 +145,11 @@ const Orders: FC<OrdersProps> = ({ orders, formik }) => {
                         <TableCell align="center">{'В разработке'}</TableCell>
                         <TableCell align="center">{order.status}</TableCell>
                         <TableCell align="center">
-                          <Button variant="contained" color="secondary">
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => handleRemoveUserOrder(order.id)}
+                          >
                             Отменить
                           </Button>
                         </TableCell>
@@ -147,7 +175,7 @@ const Orders: FC<OrdersProps> = ({ orders, formik }) => {
           <DialogTitle id="form-dialog-title">Создать заказ</DialogTitle>
           <DialogContent>
             <Grid container alignItems="center" spacing={2} justify="center">
-              <Grid item xs={8}>
+              <Grid item xs={12}>
                 <TextField
                   name="description"
                   label="Описание"
@@ -157,7 +185,7 @@ const Orders: FC<OrdersProps> = ({ orders, formik }) => {
                   multiline
                 />
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     fullWidth
@@ -176,12 +204,102 @@ const Orders: FC<OrdersProps> = ({ orders, formik }) => {
                   />
                 </MuiPickersUtilsProvider>
               </Grid>
-
-              <Grid item xs={8}>
-                <Button variant="contained" component="label">
-                  Upload File
-                  <input type="file" hidden />
-                </Button>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="city">Выбрать город</InputLabel>
+                  <Select
+                    name="cityLocation"
+                    labelId="city"
+                    id="city-select"
+                    onChange={(e) => {
+                      formik.setFieldValue('cityLocation', e.target.value);
+                      handleSelectCity(e);
+                    }}
+                    value={formik.values.cityLocation}
+                  >
+                    <MenuItem value={0} key={0}>
+                      {'Выбрать город'}
+                    </MenuItem>
+                    {locations.map((location) => {
+                      return (
+                        <MenuItem value={location.id} key={location.id}>
+                          {location.title}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Доступные районы
+                  </InputLabel>
+                  <Select
+                    name="district"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={formik.values.district}
+                    onChange={formik.handleChange}
+                    disabled={
+                      !Boolean(
+                        locations.find((loc) => loc.id === selectedCity)
+                          ?.children.length
+                      )
+                    }
+                  >
+                    <MenuItem value={0} key={0}>
+                      {'Выбрать район'}
+                    </MenuItem>
+                    {locations
+                      .find((loc) => loc.id === selectedCity)
+                      ?.children.map((location) => (
+                        <MenuItem value={location.id} key={location.id}>
+                          {location.title}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Улица"
+                  name="street"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="Номер дома"
+                  name="homeNumber"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="Подъезд"
+                  name="entrance"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="Этаж"
+                  name="floor"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="Квартира"
+                  name="apartNumber"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
               </Grid>
             </Grid>
           </DialogContent>
