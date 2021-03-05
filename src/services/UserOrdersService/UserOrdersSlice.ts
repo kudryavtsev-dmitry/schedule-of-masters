@@ -1,6 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserData } from '../MastersService/MastersSlice';
 
+export type Address = {
+  id: number;
+  locationId: number;
+  street: string;
+  homeNumber: string;
+  entrance: string;
+  floor: string;
+  apartNumber: string;
+};
+
 export type Orders = {
   id: number;
   description: string;
@@ -10,6 +20,7 @@ export type Orders = {
   comment: string | null;
   photos: null;
   user: UserData;
+  address: Address;
 };
 
 export interface OrdersState {

@@ -8,6 +8,7 @@ import {
   loadUserOrdersAsync,
   removeUserOrder,
 } from '../../services/UserOrdersService/UserOrdersService';
+import { createOrderSchema } from '../CreateOrderContainer/createOrderSchema';
 
 export type UserOrdersFormik = {
   description: string;
@@ -46,25 +47,6 @@ const OrdersContainer = () => {
     setSelectedCity(undefined);
   };
 
-  const formik: FormikProps<UserOrdersFormik> = useFormik({
-    initialValues: {
-      description: '',
-      dateStart: new Date(),
-      cityLocation: 0,
-      district: 0,
-      street: '',
-      homeNumber: '',
-      entrance: '',
-      floor: '',
-      apartNumber: '',
-    },
-    onSubmit: (values) => {
-      if (user.id) {
-        dispatch(addOrder(values, user.id));
-      }
-    },
-  });
-
   useEffect(() => {
     if (user.id) {
       dispatch(loadUserOrdersAsync(user.id));
@@ -74,9 +56,7 @@ const OrdersContainer = () => {
   return (
     <Orders
       orders={userOrders.orders}
-      formik={formik}
       handleRemoveUserOrder={handleRemoveUserOrder}
-      locations={locations}
       selectedCity={selectedCity}
       handleSelectCity={handleSelectCity}
       handleClearCity={handleClearCity}

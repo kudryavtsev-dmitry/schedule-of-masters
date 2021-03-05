@@ -14,7 +14,7 @@ export const loadUserOrdersAsync = (
 
     const { status, data } = await api.get(`/orders/${id}`);
 
-    console.log(1111, data);
+    console.log(88888, data);
 
     if (status === 200) {
       dispatch(saveUserOrders(data));
