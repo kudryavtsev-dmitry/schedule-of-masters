@@ -5,3 +5,4 @@ export { default as Layout } from './Layout';
 export { default as Main } from './Main';
 export { default as Orders } from './Orders';
 export { default as CreateOrder } from './CreateOrder';
+export { default as ConfirmList } from './ConfirmList';

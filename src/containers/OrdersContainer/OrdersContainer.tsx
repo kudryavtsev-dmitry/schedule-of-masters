@@ -1,3 +1,4 @@
+import { Box, CircularProgress } from '@material-ui/core';
 import { FormikProps, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,10 +32,6 @@ const OrdersContainer = () => {
 
   const userOrders = useSelector((state: RootState) => state.userOrders);
 
-  const locations = useSelector(
-    (state: RootState) => state.locations.locations
-  );
-
   const handleRemoveUserOrder = (id: number) => {
     user.id && dispatch(removeUserOrder(id, user.id));
   };
@@ -52,6 +49,19 @@ const OrdersContainer = () => {
       dispatch(loadUserOrdersAsync(user.id));
     }
   }, []);
+
+  if (userOrders.loading && user.loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="calc(100vh - 48px)"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Orders

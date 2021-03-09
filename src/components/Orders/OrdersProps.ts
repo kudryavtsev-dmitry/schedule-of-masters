@@ -1,7 +1,4 @@
-import { FormikProps } from 'formik';
-import { UserOrdersFormik } from '../../containers/OrdersContainer/OrdersContainer';
-import { Location } from '../../services/LocationService/LocationSlice';
-import { Orders } from '../../services/UserOrdersService/UserOrdersSlice';
+import { Orders } from '../../services/OrdersService/OrdersSlice';
 
 export interface OrdersProps {
   orders: Orders[];

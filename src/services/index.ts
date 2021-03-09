@@ -6,6 +6,7 @@ import locationsReducer from './LocationService/LocationSlice';
 import specializationsReducer from './SpecializaionService/SpecializationSlice';
 import masterReducer from './MastersService/MastersSlice';
 import userOrdersReducer from './UserOrdersService/UserOrdersSlice';
+import ordersReducer from './OrdersService/OrdersSlice';
 
 export const rootReducer = combineReducers({
   user: userReducer,
@@ -15,6 +16,7 @@ export const rootReducer = combineReducers({
   specializations: specializationsReducer,
   masters: masterReducer,
   userOrders: userOrdersReducer,
+  orders: ordersReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

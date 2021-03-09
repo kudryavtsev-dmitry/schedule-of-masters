@@ -8,7 +8,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import LayoutContainer from './containers/LatoutContainer/LayoutContainer';
+import { LayoutContainer } from './containers';
 import {
   AuthContainer,
   HeaderContainer,

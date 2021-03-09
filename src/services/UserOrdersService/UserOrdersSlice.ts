@@ -1,27 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { UserData } from '../MastersService/MastersSlice';
-
-export type Address = {
-  id: number;
-  locationId: number;
-  street: string;
-  homeNumber: string;
-  entrance: string;
-  floor: string;
-  apartNumber: string;
-};
-
-export type Orders = {
-  id: number;
-  description: string;
-  dateStart: Date;
-  dateEnd: Date | null;
-  status: number;
-  comment: string | null;
-  photos: null;
-  user: UserData;
-  address: Address;
-};
+import { Orders } from '../OrdersService/OrdersSlice';
 
 export interface OrdersState {
   loading: boolean;
@@ -33,8 +11,8 @@ const initialState = {
   orders: [],
 } as OrdersState;
 
-const ordersSlice = createSlice({
-  name: 'orders',
+const userOrdersSlice = createSlice({
+  name: 'userOrders',
   initialState,
   reducers: {
     saveUserOrders(state, action) {
@@ -46,7 +24,7 @@ const ordersSlice = createSlice({
     },
   },
 });
-const { actions, reducer } = ordersSlice;
+const { actions, reducer } = userOrdersSlice;
 
 export const { saveUserOrders, userOrdersLoading } = actions;
 

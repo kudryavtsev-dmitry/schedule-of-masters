@@ -1,1 +1,3 @@
-export interface LayoutProps {}
+export interface LayoutProps {
+  role: number;
+}
