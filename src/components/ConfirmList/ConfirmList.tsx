@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import React, { FC } from 'react';
+import { ConfirmOrderContainer } from '../../containers';
 import { Orders } from '../../services/OrdersService/OrdersSlice';
 import { orderStatuses } from '../../utils/spravs/orderStatuses';
 import { ConfirmListProps } from './ConfirmListProps';
@@ -40,12 +41,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const ConfirmList: FC<ConfirmListProps> = ({
   orders,
-  open,
+  id,
   handleClickOpen,
   handleClose,
 }) => {
-  const classes = useStyles();
+  console.log(555, id);
 
+  const classes = useStyles();
   return (
     <>
       <Box className={classes.root} display="flex" justifyContent="center">
@@ -84,7 +86,7 @@ const ConfirmList: FC<ConfirmListProps> = ({
                           <Button
                             variant="outlined"
                             color="primary"
-                            onClick={handleClickOpen}
+                            onClick={() => handleClickOpen(order.id)}
                           >
                             Выбор
                           </Button>
@@ -99,11 +101,15 @@ const ConfirmList: FC<ConfirmListProps> = ({
         </Card>
       </Box>
       <Dialog
-        open={open}
+        open={Boolean(id)}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <Box>fdfdfd</Box>
+        <ConfirmOrderContainer
+          orders={orders}
+          orderId={id}
+          handleClose={handleClose}
+        />
       </Dialog>
     </>
   );

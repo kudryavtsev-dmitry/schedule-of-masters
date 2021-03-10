@@ -1,8 +1,7 @@
 import { Orders } from '../../services/OrdersService/OrdersSlice';
 
-export interface ConfirmListProps {
+export interface ConfirmDialogContainerProps {
   orders: Orders[];
-  id?: number;
-  handleClickOpen: (id: number) => void;
+  orderId?: number;
   handleClose: () => void;
 }

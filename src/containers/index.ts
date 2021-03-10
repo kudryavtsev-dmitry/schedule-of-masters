@@ -5,3 +5,4 @@ export { default as OrdersContainer } from './OrdersContainer';
 export { default as CreateOrderContainer } from './CreateOrderContainer';
 export { default as LayoutContainer } from './LayoutContainer';
 export { default as ConfirmListContainer } from './ConfirmListContainer';
+export { default as ConfirmOrderContainer } from './ConfirmOrderContainer';

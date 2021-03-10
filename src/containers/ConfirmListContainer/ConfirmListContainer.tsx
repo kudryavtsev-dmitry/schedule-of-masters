@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import { ConfirmList } from '../../components';
 import { RootState } from '../../services';
 import { loadOrdersAsync } from '../../services/OrdersService/OrdersService';
@@ -7,14 +8,14 @@ import { loadOrdersAsync } from '../../services/OrdersService/OrdersService';
 const ConfirmListContainer = () => {
   const dispatch = useDispatch();
 
-  const [open, setOpen] = useState(false);
+  const [id, setId] = useState<number>();
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (id: number) => {
+    setId(id);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setId(undefined);
   };
 
   const orders = useSelector((state: RootState) => state.orders.orders);
@@ -26,7 +27,7 @@ const ConfirmListContainer = () => {
   return (
     <ConfirmList
       orders={orders}
-      open={open}
+      id={id}
       handleClickOpen={handleClickOpen}
       handleClose={handleClose}
     />
