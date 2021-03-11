@@ -5,8 +5,6 @@ import Main from '../Main';
 import { LayoutProps } from './LayoutProps';
 
 const Layout: FC<LayoutProps> = ({ role }) => {
-  console.log(222, role);
-
   if (role === 1) {
     return (
       <Switch>

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { UserData } from '../MastersService/MastersSlice';
+import { Master, UserData } from '../MastersService/MastersSlice';
 
 export type Address = {
   id: number;
@@ -9,6 +9,8 @@ export type Address = {
   entrance: string;
   floor: string;
   apartNumber: string;
+  district: string;
+  city: string;
 };
 
 export type Orders = {
@@ -16,6 +18,7 @@ export type Orders = {
   description: string;
   dateStart: Date;
   dateEnd: Date | null;
+  master: Master | null;
   status: number;
   comment: string | null;
   photos: null;

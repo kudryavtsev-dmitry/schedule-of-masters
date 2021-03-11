@@ -1,3 +1,4 @@
+import { Box, CircularProgress } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -18,15 +19,28 @@ const ConfirmListContainer = () => {
     setId(undefined);
   };
 
-  const orders = useSelector((state: RootState) => state.orders.orders);
+  const orders = useSelector((state: RootState) => state.orders);
 
   useEffect(() => {
     dispatch(loadOrdersAsync());
   }, []);
 
+  if (orders.loading) {
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="calc(100vh - 48px)"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <ConfirmList
-      orders={orders}
+      orders={orders.orders}
       id={id}
       handleClickOpen={handleClickOpen}
       handleClose={handleClose}

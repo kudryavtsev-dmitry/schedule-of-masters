@@ -19,12 +19,23 @@ import { orderStatuses } from '../../utils/spravs/orderStatuses';
 import { ConfirmOrderProps } from './ConfirmOrderProps';
 
 const ConfirmOrder: FC<ConfirmOrderProps> = ({
-  selecterOrder,
+  selectedOrder,
   handleClose,
+  masters,
+  services,
+  specializations,
+  formik,
+  handleChangeSpecializationId,
+  specializationId,
 }) => {
-  if (selecterOrder) {
+  if (selectedOrder && masters.length) {
     return (
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          formik.handleSubmit();
+        }}
+      >
         <DialogTitle />
         <DialogContent>
           <Grid container spacing={2} justify="center">
@@ -39,20 +50,20 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
                   >
                     <Grid item xs={12}>
                       <Typography>
-                        {selecterOrder.user.firstName}{' '}
-                        {selecterOrder.user.lastName}{' '}
-                        {selecterOrder.user.patronymic}
+                        {selectedOrder.user.firstName}{' '}
+                        {selectedOrder.user.lastName}{' '}
+                        {selectedOrder.user.patronymic}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
                       <Typography>
-                        {moment(selecterOrder.dateStart).format('DD.MM.yyyy')}
+                        {moment(selectedOrder.dateStart).format('DD.MM.yyyy')}
                       </Typography>
                     </Grid>
 
                     <Grid item xs={12}>
                       <Typography>
-                        {orderStatuses.get(selecterOrder.status)}
+                        {orderStatuses.get(selectedOrder.status)}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -60,7 +71,7 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
               </Card>
             </Grid>
             <Grid item xs={6}>
-              <Typography>{selecterOrder.description}</Typography>
+              <Typography>{selectedOrder.description}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Card>
@@ -68,39 +79,43 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
                   <Grid container spacing={2} justify="center">
                     <Grid item xs={4}>
                       <Typography align="center">
-                        Город: В разработке
+                        Город: {selectedOrder.address.city}
                       </Typography>
                     </Grid>
                     <Grid item xs={4}>
                       <Typography align="center">
-                        Район: В разработке
+                        Район: {selectedOrder.address.district}
                       </Typography>
                     </Grid>
                     <Grid item xs={4}>
                       <Typography align="center">
-                        Улица: {selecterOrder.address.street}
+                        Улица: {selectedOrder.address.street}
                       </Typography>
                     </Grid>
                     <Grid item xs={3}>
                       <Typography align="center">
-                        № Дома: {selecterOrder.address.homeNumber}
+                        № Дома: {selectedOrder.address.homeNumber}
                       </Typography>
                     </Grid>
-                    <Grid item xs={3}>
-                      <Typography align="center">
-                        Подъезд: {selecterOrder.address.entrance}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography align="center">
-                        Этаж: {selecterOrder.address.floor}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography align="center">
-                        Квартира: {selecterOrder.address.apartNumber}
-                      </Typography>
-                    </Grid>
+                    {selectedOrder.address.entrance && (
+                      <>
+                        <Grid item xs={3}>
+                          <Typography align="center">
+                            Подъезд: {selectedOrder.address.entrance}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                          <Typography align="center">
+                            Этаж: {selectedOrder.address.floor}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                          <Typography align="center">
+                            Квартира: {selectedOrder.address.apartNumber}
+                          </Typography>
+                        </Grid>
+                      </>
+                    )}
                   </Grid>
                 </CardContent>
               </Card>
@@ -111,20 +126,86 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
                   <Grid container spacing={2} justify="center">
                     <Grid item xs={12}>
                       <FormControl fullWidth>
-                        <InputLabel id="city">
-                          Мастера, доступные по данной локации
+                        <InputLabel id="specialization">
+                          Выбрать специализацию
                         </InputLabel>
                         <Select
-                          name="cityLocation"
-                          labelId="city"
-                          id="city-select"
+                          name="specialization"
+                          labelId="specialization"
+                          id="specialization-select"
+                          defaultValue={0}
+                          onChange={(e) => {
+                            console.log(e.target.value);
+
+                            handleChangeSpecializationId(
+                              e.target.value as number
+                            );
+                          }}
                         >
                           <MenuItem value={0} key={0}>
-                            Выбрать мастера
+                            Выбрать специализацию
                           </MenuItem>
+                          {specializations.map((specialization) => (
+                            <MenuItem
+                              value={specialization.id}
+                              key={specialization.id}
+                            >
+                              {specialization.title}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </Grid>
+                    {!!specializationId && (
+                      <>
+                        <Grid item xs={12}>
+                          <FormControl fullWidth>
+                            <InputLabel id="masters">
+                              Мастера, доступные по данной локации
+                            </InputLabel>
+                            <Select
+                              name="master"
+                              labelId="masters"
+                              id="master-select"
+                              defaultValue={0}
+                              value={formik.values.master}
+                              onChange={formik.handleChange}
+                            >
+                              <MenuItem value={0} key={0}>
+                                Выбрать мастера
+                              </MenuItem>
+                              {masters.map((master) => (
+                                <MenuItem value={master.id} key={master.id}>
+                                  {master.user.firstName} {master.user.lastName}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <FormControl fullWidth>
+                            <InputLabel id="service">Выбрать услугу</InputLabel>
+                            <Select
+                              name="service"
+                              labelId="service"
+                              id="service-select"
+                              defaultValue={0}
+                              value={formik.values.service}
+                              onChange={formik.handleChange}
+                            >
+                              <MenuItem value={0} key={0}>
+                                Выбрать услугу
+                              </MenuItem>
+                              {services.map((service) => (
+                                <MenuItem value={service.id} key={service.id}>
+                                  {service.title}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      </>
+                    )}
                   </Grid>
                 </CardContent>
               </Card>
@@ -138,7 +219,7 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
           <Button color="secondary" variant="contained">
             Отказать
           </Button>
-          <Button color="primary" variant="contained">
+          <Button color="primary" variant="contained" type="submit">
             Принять
           </Button>
         </DialogActions>

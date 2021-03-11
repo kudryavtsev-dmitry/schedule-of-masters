@@ -45,8 +45,6 @@ const ConfirmList: FC<ConfirmListProps> = ({
   handleClickOpen,
   handleClose,
 }) => {
-  console.log(555, id);
-
   const classes = useStyles();
   return (
     <>
@@ -68,7 +66,7 @@ const ConfirmList: FC<ConfirmListProps> = ({
                 <TableBody>
                   {orders.map((order: Orders) => {
                     return (
-                      <TableRow>
+                      <TableRow key={order.id}>
                         <TableCell align="center">
                           {moment(order.dateStart).format('DD.MM.yyyy')}
                         </TableCell>

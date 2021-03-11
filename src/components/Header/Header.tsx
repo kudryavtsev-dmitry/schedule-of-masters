@@ -24,7 +24,7 @@ const Header: FC<HeaderProps> = ({ handleLogOut }) => {
           <Typography variant="h6" color="inherit" className={classes.title}>
             Расписание мастеров
           </Typography>
-          <NavLink to="/orders">Заказы</NavLink>
+          {/* <NavLink to="/orders">Заказы</NavLink> */}
 
           <IconButton
             aria-label="account of current user"
