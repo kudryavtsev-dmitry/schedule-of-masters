@@ -4,31 +4,41 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
+  makeStyles,
   TextField,
+  Typography,
 } from '@material-ui/core';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import {
+  AddressSuggestions,
+  DaDataAddress,
+  DaDataSuggestion,
+} from 'react-dadata';
 import { CreateOrderProps } from './CreateOrderProps';
+import 'react-dadata/dist/react-dadata.css';
 
-const CreateOrder: FC<CreateOrderProps> = ({
-  formik,
-  handleSelectCity,
-  locations,
-  handleClose,
-  selectedCity,
-}) => {
+const useStyles = makeStyles({
+  root: {
+    height: 500,
+  },
+});
+
+const CreateOrder: FC<CreateOrderProps> = ({ formik, handleClose }) => {
+  const [value, setValue] = useState<
+    DaDataSuggestion<DaDataAddress> | undefined
+  >();
+
+  const classes = useStyles();
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <DialogTitle id="form-dialog-title">Создать заказ</DialogTitle>
-      <DialogContent>
+      <DialogContent className={classes.root}>
         <Grid container alignItems="center" spacing={2} justify="center">
           <Grid item xs={12}>
             <TextField
@@ -65,120 +75,14 @@ const CreateOrder: FC<CreateOrderProps> = ({
             </MuiPickersUtilsProvider>
           </Grid>
           <Grid item xs={12}>
-            <FormControl
-              fullWidth
-              error={Boolean(
-                formik.touched.cityLocation && formik.errors.cityLocation
-              )}
-            >
-              <InputLabel id="city">Выбрать город</InputLabel>
-              <Select
-                name="cityLocation"
-                labelId="city"
-                id="city-select"
-                onChange={(e) => {
-                  formik.setFieldValue('cityLocation', e.target.value);
-                  handleSelectCity(e);
-                }}
-                value={formik.values.cityLocation}
-              >
-                <MenuItem value={0} key={0}>
-                  {'Выбрать город'}
-                </MenuItem>
-                {locations.map((location) => {
-                  return (
-                    <MenuItem value={location.id} key={location.id}>
-                      {location.title}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Доступные районы
-              </InputLabel>
-              <Select
-                name="district"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={formik.values.district}
-                onChange={formik.handleChange}
-                disabled={
-                  !Boolean(
-                    locations.find((loc) => loc.id === selectedCity)?.children
-                      .length
-                  )
-                }
-              >
-                <MenuItem value={0} key={0}>
-                  {'Выбрать район'}
-                </MenuItem>
-                {locations
-                  .find((loc) => loc.id === selectedCity)
-                  ?.children.map((location) => (
-                    <MenuItem value={location.id} key={location.id}>
-                      {location.title}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Улица"
-              name="street"
-              fullWidth
-              onChange={formik.handleChange}
-              error={Boolean(formik.touched.street && formik.errors.street)}
-              helperText={formik.touched.street && formik.errors.street}
-              onBlur={formik.handleBlur}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Номер дома"
-              name="homeNumber"
-              fullWidth
-              onChange={formik.handleChange}
-              error={Boolean(
-                formik.touched.homeNumber && formik.errors.homeNumber
-              )}
-              helperText={formik.touched.homeNumber && formik.errors.homeNumber}
-              onBlur={formik.handleBlur}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Подъезд"
-              name="entrance"
-              fullWidth
-              onChange={formik.handleChange}
-              error={Boolean(formik.touched.entrance && formik.errors.entrance)}
-              helperText={formik.touched.entrance && formik.errors.entrance}
-              onBlur={formik.handleBlur}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Этаж"
-              name="floor"
-              fullWidth
-              onChange={formik.handleChange}
-              error={Boolean(formik.touched.floor && formik.errors.floor)}
-              helperText={formik.touched.floor && formik.errors.floor}
-              onBlur={formik.handleBlur}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Квартира"
-              name="apartNumber"
-              fullWidth
-              onChange={formik.handleChange}
-            />
+            <>
+              <Typography>Введите адрес</Typography>
+              <AddressSuggestions
+                token="cce013f68eec2e417ea7e9d629aa901dc39ce957"
+                value={value}
+                onChange={(value) => formik.setFieldValue('address', value)}
+              />
+            </>
           </Grid>
         </Grid>
       </DialogContent>

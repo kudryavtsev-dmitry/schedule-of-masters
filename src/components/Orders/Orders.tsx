@@ -96,7 +96,9 @@ const Orders: FC<OrdersProps> = ({
                   <TableHead>
                     <TableRow>
                       <TableCell align="center">Дата создания</TableCell>
-                      <TableCell align="center">Описание работы</TableCell>
+                      <TableCell align="center" width="35%">
+                        Описание работы
+                      </TableCell>
                       <TableCell align="center">Мастер</TableCell>
                       <TableCell align="center">Адрес</TableCell>
                       <TableCell align="center">Статус</TableCell>
@@ -113,9 +115,7 @@ const Orders: FC<OrdersProps> = ({
                           {order.description}
                         </TableCell>
                         <TableCell align="center">Не назначен</TableCell>
-                        <TableCell align="center">
-                          ул.{order.address.street}, {order.address.homeNumber}
-                        </TableCell>
+                        <TableCell align="center">{order.address}</TableCell>
 
                         <TableCell align="center">
                           {orderStatuses.get(order.status)}

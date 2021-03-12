@@ -1,6 +1,6 @@
 import { Action, ThunkAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { UserOrdersFormik } from '../../containers/OrdersContainer/OrdersContainer';
+import { CreateOrdersFormik } from '../../containers/CreateOrderContainer/CreateOrderContainer';
 import { api } from '../../utils';
 import { saveUserOrders, userOrdersLoading } from './UserOrdersSlice';
 
@@ -25,7 +25,7 @@ export const loadUserOrdersAsync = (
 };
 
 export const addOrder = (
-  values: UserOrdersFormik,
+  values: CreateOrdersFormik,
   id: number
 ): ThunkAction<void, RootState, unknown, Action<string>> => async (
   dispatch

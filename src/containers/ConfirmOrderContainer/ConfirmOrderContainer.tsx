@@ -47,7 +47,7 @@ const ConfirmOrderContainer: FC<ConfirmDialogContainerProps> = ({
     onSubmit: (values) => {
       if (selectedOrder) {
         handleClose();
-        dispatch(editOrderAsync(values, selectedOrder.id, 3));
+        dispatch(editOrderAsync(values, selectedOrder.id, 2));
       }
     },
   });

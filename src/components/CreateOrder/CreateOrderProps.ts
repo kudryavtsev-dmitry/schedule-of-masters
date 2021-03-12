@@ -1,9 +1,9 @@
 import { FormikProps } from 'formik';
-import { UserOrdersFormik } from '../../containers/OrdersContainer/OrdersContainer';
+import { CreateOrdersFormik } from '../../containers/CreateOrderContainer/CreateOrderContainer';
 import { Location } from '../../services/LocationService/LocationSlice';
 
 export type CreateOrderProps = {
-  formik: FormikProps<UserOrdersFormik>;
+  formik: FormikProps<CreateOrdersFormik>;
   locations: Location[];
   selectedCity?: number;
   handleSelectCity: (event: React.ChangeEvent<{ value: unknown }>) => void;

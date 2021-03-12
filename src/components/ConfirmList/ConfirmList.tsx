@@ -74,9 +74,7 @@ const ConfirmList: FC<ConfirmListProps> = ({
                           {order.user.firstName} {order.user.lastName}{' '}
                           {order.user.patronymic}
                         </TableCell>
-                        <TableCell align="center">
-                          ул.{order.address.street}, {order.address.homeNumber}
-                        </TableCell>
+                        <TableCell align="center">{order.address}</TableCell>
                         <TableCell align="center">
                           {orderStatuses.get(order.status)}
                         </TableCell>

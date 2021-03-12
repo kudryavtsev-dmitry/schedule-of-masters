@@ -1,5 +1,6 @@
 import { FormikProps, useFormik } from 'formik';
 import React, { FC, useState } from 'react';
+import { DaDataAddress, DaDataSuggestion } from 'react-dadata';
 import { useSelector, useDispatch } from 'react-redux';
 import { CreateOrder } from '../../components';
 import { RootState } from '../../services';
@@ -7,16 +8,10 @@ import { addOrder } from '../../services/UserOrdersService/UserOrdersService';
 import { CreateOrderContainerProps } from './CreateOrderContainerProps';
 import { createOrderSchema } from './createOrderSchema';
 
-export type UserOrdersFormik = {
+export type CreateOrdersFormik = {
   description: string;
   dateStart: Date;
-  cityLocation: number;
-  district: number;
-  street: string;
-  homeNumber: string;
-  entrance: string;
-  floor: string;
-  apartNumber: string;
+  address: DaDataSuggestion<DaDataAddress>;
 };
 
 const CreateOrderContainer: FC<CreateOrderContainerProps> = ({
@@ -33,21 +28,16 @@ const CreateOrderContainer: FC<CreateOrderContainerProps> = ({
 
   const dispatch = useDispatch();
 
-  const formik: FormikProps<UserOrdersFormik> = useFormik({
+  const formik: FormikProps<CreateOrdersFormik> = useFormik({
     initialValues: {
       description: '',
       dateStart: new Date(),
-      cityLocation: 0,
-      district: 0,
-      street: '',
-      homeNumber: '',
-      entrance: '',
-      floor: '',
-      apartNumber: '',
+      address: { value: '', unrestricted_value: '', data: {} as DaDataAddress },
     },
     validationSchema: createOrderSchema,
     onSubmit: (values) => {
       if (user.id) {
+        console.log(22222, values);
         dispatch(addOrder(values, user.id));
         // formik.handleReset();
       }

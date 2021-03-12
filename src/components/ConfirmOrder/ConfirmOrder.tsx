@@ -17,6 +17,7 @@ import moment from 'moment';
 import React, { FC } from 'react';
 import { orderStatuses } from '../../utils/spravs/orderStatuses';
 import { ConfirmOrderProps } from './ConfirmOrderProps';
+import { YMaps, Map, Placemark } from 'react-yandex-maps';
 
 const ConfirmOrder: FC<ConfirmOrderProps> = ({
   selectedOrder,
@@ -39,6 +40,30 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
         <DialogTitle />
         <DialogContent>
           <Grid container spacing={2} justify="center">
+            <Grid item xs={12}>
+              <Card>
+                <YMaps>
+                  <Map
+                    defaultState={{
+                      center: [
+                        +selectedOrder.addressLat,
+                        +selectedOrder.addressLon,
+                      ],
+                      zoom: 13,
+                    }}
+                    width="100%"
+                    height="150px"
+                  >
+                    <Placemark
+                      geometry={[
+                        +selectedOrder.addressLat,
+                        +selectedOrder.addressLon,
+                      ]}
+                    />
+                  </Map>
+                </YMaps>
+              </Card>
+            </Grid>
             <Grid item xs={6}>
               <Card>
                 <CardContent>
@@ -62,9 +87,7 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
                     </Grid>
 
                     <Grid item xs={12}>
-                      <Typography>
-                        {orderStatuses.get(selectedOrder.status)}
-                      </Typography>
+                      <Typography>{selectedOrder.address}</Typography>
                     </Grid>
                   </Grid>
                 </CardContent>
@@ -72,53 +95,6 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
             </Grid>
             <Grid item xs={6}>
               <Typography>{selectedOrder.description}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Card>
-                <CardContent>
-                  <Grid container spacing={2} justify="center">
-                    <Grid item xs={4}>
-                      <Typography align="center">
-                        Город: {selectedOrder.address.city}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Typography align="center">
-                        Район: {selectedOrder.address.district}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Typography align="center">
-                        Улица: {selectedOrder.address.street}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography align="center">
-                        № Дома: {selectedOrder.address.homeNumber}
-                      </Typography>
-                    </Grid>
-                    {selectedOrder.address.entrance && (
-                      <>
-                        <Grid item xs={3}>
-                          <Typography align="center">
-                            Подъезд: {selectedOrder.address.entrance}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                          <Typography align="center">
-                            Этаж: {selectedOrder.address.floor}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                          <Typography align="center">
-                            Квартира: {selectedOrder.address.apartNumber}
-                          </Typography>
-                        </Grid>
-                      </>
-                    )}
-                  </Grid>
-                </CardContent>
-              </Card>
             </Grid>
             <Grid item xs={12}>
               <Card>
