@@ -14,25 +14,17 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { FC, useState } from 'react';
-import {
-  AddressSuggestions,
-  DaDataAddress,
-  DaDataSuggestion,
-} from 'react-dadata';
+import { AddressSuggestions } from 'react-dadata';
 import { CreateOrderProps } from './CreateOrderProps';
 import 'react-dadata/dist/react-dadata.css';
 
 const useStyles = makeStyles({
   root: {
-    height: 500,
+    height: 400,
   },
 });
 
 const CreateOrder: FC<CreateOrderProps> = ({ formik, handleClose }) => {
-  const [value, setValue] = useState<
-    DaDataSuggestion<DaDataAddress> | undefined
-  >();
-
   const classes = useStyles();
 
   return (
@@ -48,6 +40,7 @@ const CreateOrder: FC<CreateOrderProps> = ({ formik, handleClose }) => {
               type="password"
               onChange={formik.handleChange}
               multiline
+              value={formik.values.description}
               error={Boolean(
                 formik.touched.description && formik.errors.description
               )}
@@ -79,7 +72,7 @@ const CreateOrder: FC<CreateOrderProps> = ({ formik, handleClose }) => {
               <Typography>Введите адрес</Typography>
               <AddressSuggestions
                 token="cce013f68eec2e417ea7e9d629aa901dc39ce957"
-                value={value}
+                value={formik.values.address}
                 onChange={(value) => formik.setFieldValue('address', value)}
               />
             </>

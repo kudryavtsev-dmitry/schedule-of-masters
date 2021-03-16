@@ -7,3 +7,6 @@ export { default as Orders } from './Orders';
 export { default as CreateOrder } from './CreateOrder';
 export { default as ConfirmList } from './ConfirmList';
 export { default as ConfirmOrder } from './ConfirmOrder';
+export { default as ConfirmTable } from './ConfirmTable';
+export { default as CreatedOrdersTable } from './CreatedOrdersTable';
+export { default as RejectedUserOrders } from './RejectedUserOrders';

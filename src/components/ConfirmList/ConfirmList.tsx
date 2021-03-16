@@ -2,26 +2,19 @@ import {
   Box,
   Card,
   CardContent,
-  CardHeader,
   makeStyles,
-  Table,
-  TableContainer,
   Theme,
-  Paper,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
   Dialog,
+  Tabs,
+  Tab,
 } from '@material-ui/core';
-import moment from 'moment';
 import React, { FC } from 'react';
 import { ConfirmOrderContainer } from '../../containers';
-import { Orders } from '../../services/OrdersService/OrdersSlice';
-import { orderStatuses } from '../../utils/spravs/orderStatuses';
 import { ConfirmListProps } from './ConfirmListProps';
 import RefuseDialog from './RefuseDialog';
+import SwipeableViews from 'react-swipeable-views';
+import { ConfirmTable } from '..';
+import { TabPanel, a11yProps } from '../TabPanel';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -50,55 +43,42 @@ const ConfirmList: FC<ConfirmListProps> = ({
   handleCloseRefuseDialog,
   formikRefuse,
 }) => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
+    setValue(newValue);
+  };
+
+  const handleChangeIndex = (index: number) => {
+    setValue(index);
+  };
+
   const classes = useStyles();
   return (
     <>
       <Box className={classes.root} display="flex" justifyContent="center">
         <Card className={classes.card}>
-          <CardHeader title="Обработка заказов" />
-          <CardContent>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Дата создания</TableCell>
-                    <TableCell align="center">Клиент</TableCell>
-                    <TableCell align="center">Адрес</TableCell>
-                    <TableCell align="center">Статус</TableCell>
-                    <TableCell align="center">Обработать заказ</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {orders.map((order: Orders) => {
-                    return (
-                      <TableRow key={order.id}>
-                        <TableCell align="center">
-                          {moment(order.dateStart).format('DD.MM.yyyy')}
-                        </TableCell>
-                        <TableCell align="center">
-                          {order.user.firstName} {order.user.lastName}{' '}
-                          {order.user.patronymic}
-                        </TableCell>
-                        <TableCell align="center">{order.address}</TableCell>
-                        <TableCell align="center">
-                          {orderStatuses.get(order.status)}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Button
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => handleClickOpen(order.id)}
-                          >
-                            Выбор
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </CardContent>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            <Tab label="Ожидают обработки" {...a11yProps(0)} />
+            <Tab label="Отклонены" {...a11yProps(1)} />
+          </Tabs>
+          <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
+            <TabPanel index={0} value={value}>
+              <CardContent>
+                <ConfirmTable
+                  orders={orders}
+                  handleClickOpen={handleClickOpen}
+                />
+              </CardContent>
+            </TabPanel>
+          </SwipeableViews>
         </Card>
       </Box>
       <Dialog

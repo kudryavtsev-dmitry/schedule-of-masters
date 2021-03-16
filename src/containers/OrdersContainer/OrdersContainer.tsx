@@ -1,15 +1,13 @@
 import { Box, CircularProgress } from '@material-ui/core';
-import { FormikProps, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Orders } from '../../components';
 import { RootState } from '../../services';
+import { Orders as OrderType } from '../../services/OrdersService/OrdersSlice';
 import {
-  addOrder,
   loadUserOrdersAsync,
   removeUserOrder,
 } from '../../services/UserOrdersService/UserOrdersService';
-import { createOrderSchema } from '../CreateOrderContainer/createOrderSchema';
 
 export type UserOrdersFormik = {
   description: string;
@@ -24,7 +22,7 @@ export type UserOrdersFormik = {
 };
 
 const OrdersContainer = () => {
-  const [selectedCity, setSelectedCity] = useState<number>();
+  const [selectedOrder, setSelectedOrder] = useState<OrderType>();
 
   const dispatch = useDispatch();
 
@@ -36,12 +34,12 @@ const OrdersContainer = () => {
     user.id && dispatch(removeUserOrder(id, user.id));
   };
 
-  const handleSelectCity = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedCity(event.target.value as number);
+  const handleSelectOrder = (order: OrderType) => {
+    setSelectedOrder(order);
   };
 
-  const handleClearCity = () => {
-    setSelectedCity(undefined);
+  const handleClearSelectedOrder = () => {
+    setSelectedOrder(undefined);
   };
 
   useEffect(() => {
@@ -65,11 +63,11 @@ const OrdersContainer = () => {
 
   return (
     <Orders
+      handleSelectOrder={handleSelectOrder}
+      handleClearSelectedOrder={handleClearSelectedOrder}
+      selectedOrder={selectedOrder}
       orders={userOrders.orders}
       handleRemoveUserOrder={handleRemoveUserOrder}
-      selectedCity={selectedCity}
-      handleSelectCity={handleSelectCity}
-      handleClearCity={handleClearCity}
     />
   );
 };

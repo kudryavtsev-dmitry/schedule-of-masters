@@ -16,9 +16,6 @@ export type CreateOrdersFormik = {
 
 const CreateOrderContainer: FC<CreateOrderContainerProps> = ({
   handleClose,
-  handleClearCity,
-  handleSelectCity,
-  selectedCity,
 }) => {
   const user = useSelector((state: RootState) => state.user);
 
@@ -37,23 +34,13 @@ const CreateOrderContainer: FC<CreateOrderContainerProps> = ({
     validationSchema: createOrderSchema,
     onSubmit: (values) => {
       if (user.id) {
-        console.log(22222, values);
         dispatch(addOrder(values, user.id));
         // formik.handleReset();
       }
     },
   });
 
-  return (
-    <CreateOrder
-      formik={formik}
-      handleClose={handleClose}
-      handleSelectCity={handleSelectCity}
-      handleClearCity={handleClearCity}
-      locations={locations}
-      selectedCity={selectedCity}
-    />
-  );
+  return <CreateOrder formik={formik} handleClose={handleClose} />;
 };
 
 export default CreateOrderContainer;

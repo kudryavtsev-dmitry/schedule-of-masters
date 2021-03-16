@@ -1,29 +1,25 @@
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
   Dialog,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Theme,
   Typography,
-  Paper,
   IconButton,
+  Tabs,
+  Tab,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 import React, { FC, useState } from 'react';
 import { OrdersProps } from './OrdersProps';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import moment from 'moment';
-import { orderStatuses } from '../../utils/spravs/orderStatuses';
 import { CreateOrderContainer } from '../../containers';
+import SwipeableViews from 'react-swipeable-views';
+import { TabPanel, a11yProps } from '../TabPanel';
+import { CreatedOrdersTable, RejectedUserOrders } from '..';
+import EditOrderContainer from '../../containers/EditOrderContainer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -54,11 +50,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Orders: FC<OrdersProps> = ({
   orders,
   handleRemoveUserOrder,
-  selectedCity,
-  handleSelectCity,
-  handleClearCity,
+  handleClearSelectedOrder,
+  handleSelectOrder,
+  selectedOrder,
 }) => {
   const [open, setOpen] = useState(false);
+
+  const [value, setValue] = useState(0);
 
   const classes = useStyles();
 
@@ -67,9 +65,20 @@ const Orders: FC<OrdersProps> = ({
   };
 
   const handleClose = () => {
-    handleClearCity();
     setOpen(false);
   };
+
+  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
+    setValue(newValue);
+  };
+
+  const handleChangeIndex = (index: number) => {
+    setValue(index);
+  };
+
+  const rejectedOrders = orders.filter((order) => order.status === 3);
+
+  console.log(666, orders);
 
   return (
     <>
@@ -89,57 +98,56 @@ const Orders: FC<OrdersProps> = ({
               </IconButton>
             }
           />
-          <CardContent className={classes.content}>
-            {orders.length ? (
-              <TableContainer component={Paper}>
-                <Table size="medium" aria-label="a dense table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">Дата создания</TableCell>
-                      <TableCell align="center" width="35%">
-                        Описание работы
-                      </TableCell>
-                      <TableCell align="center">Мастер</TableCell>
-                      <TableCell align="center">Адрес</TableCell>
-                      <TableCell align="center">Статус</TableCell>
-                      <TableCell align="center">Действие</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {orders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell align="center">
-                          {moment(order.dateStart).format('DD.MM.yyyy')}
-                        </TableCell>
-                        <TableCell align="center">
-                          {order.description}
-                        </TableCell>
-                        <TableCell align="center">Не назначен</TableCell>
-                        <TableCell align="center">{order.address}</TableCell>
-
-                        <TableCell align="center">
-                          {orderStatuses.get(order.status)}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => handleRemoveUserOrder(order.id)}
-                          >
-                            Отменить
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            ) : (
-              <>
-                <Typography>Пока заказов нет.</Typography>
-              </>
-            )}
-          </CardContent>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            <Tab
+              label={`Ожидают обработки (${
+                orders.filter((order) => order.status === 1).length
+              })`}
+              {...a11yProps(0)}
+            />
+            <Tab
+              label={`Отклонено (${rejectedOrders.length})`}
+              {...a11yProps(1)}
+            />
+          </Tabs>
+          <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
+            <TabPanel index={0} value={value}>
+              <CardContent className={classes.content}>
+                {orders.length ? (
+                  <CreatedOrdersTable
+                    orders={orders.filter((order) => order.status === 1)}
+                    handleRemoveUserOrder={handleRemoveUserOrder}
+                  />
+                ) : (
+                  <>
+                    <Typography>Пока заказов нет.</Typography>
+                  </>
+                )}
+              </CardContent>
+            </TabPanel>
+            <TabPanel index={1} value={value}>
+              <CardContent className={classes.content}>
+                {orders.length ? (
+                  <RejectedUserOrders
+                    orders={rejectedOrders}
+                    handleRemoveUserOrder={handleRemoveUserOrder}
+                    handleSelectOrder={handleSelectOrder}
+                  />
+                ) : (
+                  <>
+                    <Typography>Пока заказов нет.</Typography>
+                  </>
+                )}
+              </CardContent>
+            </TabPanel>
+          </SwipeableViews>
         </Card>
       </Box>
       <Dialog
@@ -147,13 +155,19 @@ const Orders: FC<OrdersProps> = ({
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <CreateOrderContainer
-          handleClose={handleClose}
-          handleClearCity={handleClearCity}
-          handleSelectCity={handleSelectCity}
-          selectedCity={selectedCity}
-        />
+        <CreateOrderContainer handleClose={handleClose} />
       </Dialog>
+      {selectedOrder && (
+        <Dialog
+          open={Boolean(selectedOrder)}
+          onClose={handleClearSelectedOrder}
+        >
+          <EditOrderContainer
+            handleClose={handleClearSelectedOrder}
+            selectedOrder={selectedOrder}
+          />
+        </Dialog>
+      )}
     </>
   );
 };
