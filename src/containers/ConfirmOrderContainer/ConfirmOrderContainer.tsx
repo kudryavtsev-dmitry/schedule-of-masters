@@ -15,6 +15,7 @@ const ConfirmOrderContainer: FC<ConfirmDialogContainerProps> = ({
   orders,
   orderId,
   handleClose,
+  handleOpenRefuseDialog,
 }) => {
   const [specializationId, setSpecializationId] = useState(0);
 
@@ -54,6 +55,7 @@ const ConfirmOrderContainer: FC<ConfirmDialogContainerProps> = ({
 
   return (
     <ConfirmOrder
+      handleOpenRefuseDialog={handleOpenRefuseDialog}
       formik={formik}
       services={services.services}
       selectedOrder={selectedOrder}

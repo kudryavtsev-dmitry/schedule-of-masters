@@ -1,5 +1,6 @@
 import { Action, ThunkAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
+import { FormikRefuseProps } from '../../containers/ConfirmListContainer/ConfirmListContainer';
 import { FormikOrdersProps } from '../../containers/ConfirmOrderContainer/ConfirmOrderContainer';
 import { api } from '../../utils';
 import { ordersLoading, saveOrders } from './OrdersSlice';
@@ -41,6 +42,28 @@ export const editOrderAsync = (
       ...values,
       id,
       status: statusId,
+    });
+
+    if (status === 200) {
+      dispatch(loadOrdersAsync());
+    }
+  } catch (e) {
+    console.log(666, e);
+  }
+};
+
+export const refuseOrderAsync = (
+  values: FormikRefuseProps,
+  id: number
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
+  dispatch
+) => {
+  try {
+    dispatch(ordersLoading());
+
+    const { status, data } = await api.put('/refuse-order', {
+      ...values,
+      id,
     });
 
     if (status === 200) {

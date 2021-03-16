@@ -2,7 +2,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -15,7 +14,6 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import React, { FC } from 'react';
-import { orderStatuses } from '../../utils/spravs/orderStatuses';
 import { ConfirmOrderProps } from './ConfirmOrderProps';
 import { YMaps, Map, Placemark } from 'react-yandex-maps';
 
@@ -28,6 +26,7 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
   formik,
   handleChangeSpecializationId,
   specializationId,
+  handleOpenRefuseDialog,
 }) => {
   if (selectedOrder && masters.length) {
     return (
@@ -37,7 +36,6 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
           formik.handleSubmit();
         }}
       >
-        <DialogTitle />
         <DialogContent>
           <Grid container spacing={2} justify="center">
             <Grid item xs={12}>
@@ -192,7 +190,11 @@ const ConfirmOrder: FC<ConfirmOrderProps> = ({
           <Button color="inherit" variant="contained" onClick={handleClose}>
             Отмена
           </Button>
-          <Button color="secondary" variant="contained">
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={handleOpenRefuseDialog}
+          >
             Отказать
           </Button>
           <Button color="primary" variant="contained" type="submit">

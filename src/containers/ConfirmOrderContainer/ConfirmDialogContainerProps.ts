@@ -4,4 +4,5 @@ export interface ConfirmDialogContainerProps {
   orders: Orders[];
   orderId?: number;
   handleClose: () => void;
+  handleOpenRefuseDialog: () => void;
 }

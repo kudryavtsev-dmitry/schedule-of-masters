@@ -21,6 +21,7 @@ import { ConfirmOrderContainer } from '../../containers';
 import { Orders } from '../../services/OrdersService/OrdersSlice';
 import { orderStatuses } from '../../utils/spravs/orderStatuses';
 import { ConfirmListProps } from './ConfirmListProps';
+import RefuseDialog from './RefuseDialog';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -44,6 +45,10 @@ const ConfirmList: FC<ConfirmListProps> = ({
   id,
   handleClickOpen,
   handleClose,
+  refuseDialog,
+  handleOpenRefuseDialog,
+  handleCloseRefuseDialog,
+  formikRefuse,
 }) => {
   const classes = useStyles();
   return (
@@ -105,6 +110,17 @@ const ConfirmList: FC<ConfirmListProps> = ({
           orders={orders}
           orderId={id}
           handleClose={handleClose}
+          handleOpenRefuseDialog={handleOpenRefuseDialog}
+        />
+      </Dialog>
+      <Dialog
+        open={refuseDialog}
+        onClose={handleCloseRefuseDialog}
+        aria-labelledby="refuse-dialog"
+      >
+        <RefuseDialog
+          handleCloseRefuseDialog={handleCloseRefuseDialog}
+          formikRefuse={formikRefuse}
         />
       </Dialog>
     </>

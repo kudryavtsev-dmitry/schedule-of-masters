@@ -14,4 +14,5 @@ export interface ConfirmOrderProps {
   formik: FormikProps<FormikOrdersProps>;
   handleChangeSpecializationId: (id: number) => void;
   specializationId: number;
+  handleOpenRefuseDialog: () => void;
 }
